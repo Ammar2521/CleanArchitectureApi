@@ -1,0 +1,29 @@
+﻿using CleanArchitectureApi.Application.Interfaces;
+using CleanArchitectureApi.Application.Products.Commands;
+using CleanArchitectureApi.Domain.Entities;
+using MediatR;
+
+namespace CleanArchitectureApi.Application.Products.Handlers;
+
+public class UpdateProductCommandHandler : IRequestHandler<UpdateProductCommand, bool>
+{
+    private readonly IProductRepository _productRepository;
+
+    public UpdateProductCommandHandler(IProductRepository productRepository)
+    {
+        _productRepository = productRepository;
+    }
+
+    public async Task<bool> Handle(UpdateProductCommand request, CancellationToken cancellationToken)
+    {
+        var product = new Product
+        {
+            Id = request.Id,
+            Name = request.Name,
+            Price = request.Price,
+            CategoryId = request.CategoryId
+        };
+
+        return await _productRepository.UpdateAsync(product);
+    }
+}
